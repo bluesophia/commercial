@@ -7,6 +7,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);// mongoDB 자�
 const csrf = require("csurf");
 const flash = require("connect-flash");
 
+
 // 내가 접속할 디비 주소
 const MONGODB_URI = 
     "mongodb+srv://sophia:1234@cluster0-gf7qa.mongodb.net/test?retryWrites=true"
@@ -18,9 +19,9 @@ const MONGODB_URI =
 // model
 const User = require('./models/user');
 const Product = require('./models/product');
-const Order = require('./models/order');
-const Cart = require('./models/cart');
-const CartItem = require('./models/cart-item');
+// const Order = require('./models/order');
+// const Cart = require('./models/cart');
+// const CartItem = require('./models/cart-item');
 
 
 const app = express();
@@ -37,7 +38,8 @@ app.set("views", "views");
 const csrfProtection = csrf({});
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
-const errorController = require("./controllers/error");
+const authRoutes = require("./routes/auth");
+// const errorController = require("./controllers/error");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,29 +55,8 @@ app.use(
     })
 )
 
-// app.use((req, res, next) => {
-//     User.findByPk(1)
-//         .then(user => {
-//             req.user = user;
-//             next();
-//         })
-//         .catch(err => console.log(err));
-// });
-
-// app.use((req, res, next) => {
-//     User.find({name: 'Jane'})
-//         .then(user => {
-//             req.user = user;
-//             next();
-//             // console.log("requser",req.user);
-//         })
-//         .catch(err => console.log(err));
-// })
-
 app.use(csrfProtection);
 app.use(flash()); 
-
-
 
 // session
 app.use((req, res, next) => {
@@ -95,6 +76,7 @@ app.use((req, res, next) => {
         })
 })
 
+// show 500 status
 app.use((error, req, res, next) => {
     res.status(500).render("500", {
         pageTitle: "Internal server error",
@@ -112,37 +94,12 @@ app.use((req, res, next) => {
 
 // route
 app.use("/admin", adminRoutes);
-app.use(shopRoutes);
+app.use("/",shopRoutes);
+app.use("/auth", authRoutes);
  
 
-// 컨트롤러
+// controller컨트롤러
 // app.use(errorController.get404);
-
-// relation
-// Product.belongsTo(User, { constraints: true, onDelete: "CASCADE"});
-// User.hasMany(Product);
-// User.hasOne(Cart);
-// User.hasMany(Order);
-// Cart.belongsTo(User);
-// Cart.belongsToMany(Product, { through: CartItem });
-// Product.belongsToMany(Cart, { through: CartItem });
-
-// Order.belongsTo(User);
-// Order.belongsToMany(Product, { through: OrderItem });
-
-
-
-// 아이디를 찾고 users의 컬렉션이 비어있을때 새로 하나 추가한다.
-User.find({}, function(err, users){
-    if(users.length === 0){
-        return User.create({name: "Jane", email: "jane@gmail.com"}, function(err, users){
-            // console.log("user created", users);
-        })
-    } else {
-        // console.log('users', users);
-    }
-})
-
 
 
 // ORM(object relation mapping)

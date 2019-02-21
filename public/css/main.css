@@ -7,7 +7,9 @@
 a {
   text-decoration: none;
 }
-
+li {
+  list-style-type: none;
+}
 body {
   padding: 0;
   margin: 0;
@@ -39,6 +41,8 @@ form {
   height: 3.5rem;
   background-color: #00695c;
   padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .main-header__nav {
@@ -124,4 +128,10 @@ form {
 .btn:active {
   background-color: #00695c;
   color: white;
+}
+
+.main-header__item-login-ul {
+  display: flex;
+  align-content: flex-end;
+  justify-content: flex-end;
 }

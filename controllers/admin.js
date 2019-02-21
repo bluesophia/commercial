@@ -11,7 +11,7 @@ exports.postAddProduct = (req, res, next) => {
     // 2. 데이터가 잘 들어왔는지 확인한다.
     console.log(req.body);
     // 3. 확인된 데이터를 새로운 오브젝트에 담아 인스턴스화 시킨다.
-    const product = new Product({
+    const Product = new Product({
         title:title,
         imageUrl: imageUrl,
         description: description,
